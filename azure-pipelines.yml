@@ -7,9 +7,9 @@ trigger:
 - master
 
 #trigger:
-  branches:
-    include:
-    - DEV
+  #branches:
+    #include:
+    #- DEV
 variables:
 - name: system.debug
   value: true
