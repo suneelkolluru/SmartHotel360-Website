@@ -22,7 +22,7 @@ stages:
   jobs:
   - job: Job
     pool:
-  vmImage: ubuntu-latest
+      name: Azure Pipelines
     steps:
     - task: Bash@3
       displayName: 'Workaround: Set environment variables manually'
