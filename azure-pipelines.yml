@@ -6,14 +6,38 @@
 trigger:
 - master
 
-pool:
-  vmImage: ubuntu-latest
+#trigger:
+  branches:
+    include:
+    - DEV
+variables:
+- name: system.debug
+  value: true
+- name: agent.diagnostic
+  value: true
+stages:
+- stage: __default
+  jobs:
+  - job: Job
+    pool:
+      name: mlagent2
+    steps:
+    - task: Bash@3
+      displayName: 'Workaround: Set environment variables manually'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd ~
+          echo "##vso[task.setvariable variable=HOME]$(pwd)"
+          echo "##vso[task.setvariable variable=USER]$(whoami)"
+          echo "##vso[task.setvariable variable=JAVA_HOME_20_X64]/usr/lib/jvm/jdk-20"
+          echo "##vso[task.setvariable variable=JAVA_HOME]/usr/lib/jvm/jdk-20"
+    - task: CmdLine@2
+      inputs:
+        script: |
+          cd helo-data-hub
+          ./gradlew mlDeploy -PmlUsername=helo-admin -PmlPassword=aEOz1A3^+fZp}2oOUL#OaaB1{Q87jt -PenvironmentName=dev -Pconfirmation=yes
+    workspace:
+      clean: all
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
